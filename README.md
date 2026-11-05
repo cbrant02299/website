@@ -39,5 +39,4 @@ Or send the write-up to Claude and ask for it to be added.
 
 ## Before sharing it
 
-- Replace `[Your license type]` in each page's footer with the license you hold.
 - Get sign-off from Alpha Capital Realty. New York requires the supervising broker to authorize an agent's website.

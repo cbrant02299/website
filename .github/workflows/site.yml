@@ -1,0 +1,81 @@
+# Updates the rates and publishes the site.
+# Runs on its own every weekday morning and evening (times are UTC),
+# every time something new is pushed to the site, and whenever you press
+# "Run workflow" on the Actions tab.
+name: Update rates and publish
+
+on:
+  schedule:
+    - cron: "23 13 * * 1-5"   # weekday mornings, about 8–9 AM New York time
+    - cron: "23 22 * * 1-5"   # weekday evenings, about 5–6 PM New York time
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      pages: ${{ steps.pages.outputs.enabled }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull the latest rates from FRED
+        run: python3 scripts/update_rates.py
+
+      - name: Save the new rates
+        run: |
+          if git diff --quiet -- data/rates.json; then
+            echo "No new rates to save."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/rates.json
+          git commit -m "Update rates"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            sleep 5
+          done
+          echo "Could not save the new rates." >&2
+          exit 1
+
+      - name: Check that GitHub Pages is turned on
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" --silent; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Site not published::GitHub Pages is off. Turn it on under Settings > Pages > Source: GitHub Actions, then run this workflow again."
+          fi
+
+      - if: steps.pages.outputs.enabled == 'true'
+        uses: actions/configure-pages@v5
+
+      - if: steps.pages.outputs.enabled == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.pages == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -28,6 +28,16 @@
     var p = String(iso).slice(0, 10).split("-");
     return MONTHS[+p[1] - 1] + " " + (+p[2]) + ", " + p[0];
   }
+  // The update time, in New York time: "Nov 4, 2026, 9:17 PM ET"
+  function fmtStamp(iso) {
+    try {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York", month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit"
+      }).format(new Date(iso)) + " ET";
+    } catch (e) {
+      return fmtDate(iso);
+    }
+  }
   function pct(v) { return v == null ? "—" : Number(v).toFixed(2) + "%"; }
   function range(lo, hi) { return Number(lo).toFixed(2) + "–" + Number(hi).toFixed(2) + "%"; }
   function valueOf(key, r) {
@@ -81,7 +91,7 @@
     document.querySelectorAll("[data-stamp]").forEach(function (el) {
       el.textContent = data.preview
         ? "Preview. The live site refreshes these every weekday."
-        : "Updated " + fmtDate(data.updated) + " from FRED";
+        : "Updated " + fmtStamp(data.updated) + " from FRED";
     });
     document.querySelectorAll("[data-preview-note]").forEach(function (el) {
       el.hidden = !data.preview;

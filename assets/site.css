@@ -66,8 +66,9 @@ a:hover { color: var(--gold-hi); }
 .nav a:hover { color: var(--ink); }
 .nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--gold); }
 @media (max-width: 480px) {
-  .nav { column-gap: 16px; }
-  .nav a { font-size: 12px; letter-spacing: .1em; }
+  .nav { column-gap: 14px; }
+  .nav a { font-size: 12px; letter-spacing: .08em; }
+  .nav a[href$="index.html"] { display: none; } /* the logo already goes home; keeps the menu on one line */
 }
 
 /* Type */
@@ -182,6 +183,11 @@ h1, h2, h3 { margin: 0; color: var(--ink); text-wrap: balance; }
 .review-row .stack { gap: 10px; }
 @media (max-width: 640px) { .review-row { grid-template-columns: minmax(0, 1fr); } }
 
+/* Blog list: date over category in the left column */
+.post-meta { display: grid; gap: 4px; align-content: start; }
+.post-cat { font-size: 13px; line-height: 1.5; color: var(--muted); }
+.empty-note { margin: 0; padding: 32px 24px; border: 1px dashed var(--line); color: var(--muted); font-size: 15px; }
+
 /* Contact */
 .contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
 .contact-item { background: var(--bg); padding: 24px; display: grid; gap: 8px; align-content: start; min-width: 0; }
@@ -266,6 +272,32 @@ th { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: u
   .eq-row { grid-template-columns: 24px minmax(0, 1fr); }
   .eq-note { grid-column: 2; }
 }
+
+/* Blog post: the parts a Markdown draft turns into (scripts/new_post.py) */
+.article h2 { margin-top: 20px; font-size: clamp(24px, 2.8vw, 30px); font-weight: 600; line-height: 1.25; }
+.article h3 { margin-top: 8px; font-size: 20px; font-weight: 600; line-height: 1.35; }
+.article ul, .article ol { margin: 0; padding-left: 24px; font-size: 18px; line-height: 1.7; }
+.article li + li { margin-top: 10px; }
+.article li::marker { color: var(--gold); font-weight: 600; }
+.article strong { color: var(--ink); font-weight: 600; }
+.article blockquote { margin: 0; padding: 2px 0 2px 22px; border-left: 2px solid var(--gold); }
+.article hr { width: 100%; margin: 0; border: 0; border-top: 1px solid var(--line); }
+.article table { width: 100%; min-width: 0; } /* fits the column when it can, scrolls sideways when it can't */
+.article p.fine { font-size: 13px; line-height: 1.6; color: var(--muted); }
+@media (max-width: 560px) {
+  .article th, .article td { padding: 10px 12px; }
+  .article th:first-child, .article td:first-child { padding-left: 0; }
+}
+.takeaway { display: grid; gap: 12px; padding: clamp(20px, 3vw, 28px); border: 1px solid var(--gold); }
+.article .takeaway p { font-size: 19px; line-height: 1.65; color: var(--ink); }
+.cite { font-size: .62em; font-weight: 600; line-height: 0; margin-left: 1px; }
+.cite a { text-decoration: none; }
+.sources { display: grid; gap: 14px; padding-top: 28px; border-top: 1px solid var(--line); }
+.article .sources h2 { margin: 0; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.4; color: var(--gold); }
+.article .sources ol, .article .sources ul, .article .sources p { font-size: 14px; line-height: 1.6; color: var(--muted); }
+.article .sources li + li { margin-top: 8px; }
+.sources a { overflow-wrap: anywhere; }
+.sources li:target { color: var(--ink); }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--gold); }

@@ -326,6 +326,31 @@
     }
   }
 
+  // ---------- Blog ----------
+  // data/posts.json lists every post, newest first. scripts/new_post.py keeps it up to date.
+  function postRow(p) {
+    var meta = '<span class="review-meta">' + esc(fmtDate(p.date)) + "</span>";
+    if (p.category) meta += '<span class="post-cat">' + esc(p.category) + "</span>";
+    return '<a class="review-row" href="' + esc(path(p.url)) + '">' +
+      '<span class="post-meta">' + meta + "</span>" +
+      '<span class="stack"><span class="h-card">' + esc(p.title) + "</span>" +
+      '<span class="review-sum">' + esc(p.summary) + "</span></span></a>";
+  }
+
+  function renderPosts(list) {
+    document.querySelectorAll("[data-post-band]").forEach(function (el) {
+      el.hidden = !list.length;
+    });
+    document.querySelectorAll("[data-post-list]").forEach(function (box) {
+      if (!list.length) {
+        if (!box.closest("[data-post-band]")) box.outerHTML = '<p class="empty-note">The first post is coming soon.</p>';
+        return;
+      }
+      var limit = parseInt(box.getAttribute("data-limit"), 10) || list.length;
+      box.innerHTML = list.slice(0, limit).map(postRow).join("");
+    });
+  }
+
   function load(name) {
     return fetch(path("data/" + name), { cache: "no-cache" }).then(function (res) {
       if (!res.ok) throw new Error(name + " " + res.status);
@@ -351,5 +376,12 @@
   }
   if (document.querySelector("[data-review-latest], [data-review-list]")) {
     load("reviews.json").then(renderReviews).catch(function () {});
+  }
+  if (document.querySelector("[data-post-list], [data-post-band]")) {
+    load("posts.json").then(renderPosts).catch(function () {
+      document.querySelectorAll("[data-post-list]").forEach(function (box) {
+        if (!box.closest("[data-post-band]")) box.innerHTML = '<p class="empty-note">The posts didn\'t load. Refresh the page to try again.</p>';
+      });
+    });
   }
 })();

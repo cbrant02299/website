@@ -1,11 +1,11 @@
 {
- "updated": "2026-11-11T01:58:51Z",
+ "updated": "2026-11-11T20:15:23Z",
  "source": "FRED, Federal Reserve Bank of St. Louis",
  "rates": {
   "fed": {
    "lower": 3.75,
    "upper": 4.0,
-   "date": "2026-11-10",
+   "date": "2026-11-11",
    "change_1w": 0.0,
    "change_1y": 0.0,
    "source": "https://fred.stlouisfed.org/series/DFEDTARU"

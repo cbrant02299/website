@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T20:56:47Z",
+ "updated": "2026-11-13T02:40:41Z",
  "source": "FRED, Federal Reserve Bank of St. Louis",
  "rates": {
   "fed": {
@@ -25,17 +25,17 @@
    "source": "https://fred.stlouisfed.org/series/SOFR"
   },
   "t5": {
-   "value": 4.67,
-   "date": "2026-11-09",
-   "change_1w": -0.03,
-   "change_1y": 1.0,
+   "value": 4.81,
+   "date": "2026-11-10",
+   "change_1w": 0.07,
+   "change_1y": 1.09,
    "source": "https://fred.stlouisfed.org/series/DGS5"
   },
   "t10": {
-   "value": 4.88,
-   "date": "2026-11-09",
-   "change_1w": -0.03,
-   "change_1y": 0.77,
+   "value": 4.98,
+   "date": "2026-11-10",
+   "change_1w": 0.03,
+   "change_1y": 0.85,
    "source": "https://fred.stlouisfed.org/series/DGS10"
   },
   "mort30": {
@@ -2495,8 +2495,8 @@
     4.86
    ],
    [
-    "2026-11-09",
-    4.88
+    "2026-11-10",
+    4.98
    ]
   ]
  }
